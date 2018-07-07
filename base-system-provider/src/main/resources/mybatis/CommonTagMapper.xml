@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ddweilai.microservice.base.system.provider.mapper.CommonTagMapper">
+	<!-- 返回值映射map -->
+	<resultMap id="commonTagMapper" type="com.ddweilai.microservice.base.system.api.entity.CommonTag">
+			<result property="id" column="id" />
+			<result property="tagName" column="tag_name" />
+			<result property="tagIdentify" column="tag_identify" />
+			<result property="module" column="module" />
+			<result property="thirdId" column="third_id" />
+			<result property="delFlag" column="del_flag" />
+			<result property="createdId" column="created_id" />
+			<result property="createdAt" column="created_at" />
+			<result property="updatedId" column="updated_id" />
+			<result property="updatedAt" column="updated_at" />
+	</resultMap>
+
+	<!-- 查询字段公共sql -->
+	<sql id="selectAllColumns">
+		SELECT
+			 id,
+			 tag_name,
+			 tag_identify,
+			 module,
+			 third_id,
+			 del_flag,
+			 created_id,
+			 created_at,
+			 updated_id,
+			 updated_at
+			FROM common_tag record
+	</sql>
+
+	<sql id="where_fragement">
+		where 1=1
+			<if test = "id != null">
+				and record.id  = #{id}
+			</if>
+			<if test = "tagName != null">
+				and record.tag_name  = #{tagName}
+			</if>
+			<if test = "tagIdentify != null">
+				and record.tag_identify  = #{tagIdentify}
+			</if>
+			<if test = "module != null">
+				and record.module  = #{module}
+			</if>
+			<if test = "thirdId != null">
+				and record.third_id  = #{thirdId}
+			</if>
+			and record.del_flag = 1
+			<if test = "createdId != null">
+				and record.created_id  = #{createdId}
+			</if>
+			<if test = "createdAt != null">
+				and record.created_at  = #{createdAt}
+			</if>
+			<if test = "updatedId != null">
+				and record.updated_id  = #{updatedId}
+			</if>
+			<if test = "updatedAt != null">
+				and record.updated_at  = #{updatedAt}
+			</if>
+	</sql>
+
+	<!-- 分页查询数据集合-->
+	<select id="findList" resultMap="commonTagMapper" >
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+	</select>
+
+	<!-- 查询单个实体 -->
+	<select id="selectOneByCondition" resultMap="commonTagMapper" >
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+        limit 1
+	</select>
+
+	<select id="get" resultMap="commonTagMapper" >
+		<include refid="selectAllColumns"/>
+		where record.id = #{id} AND record.del_flag = 1
+	</select>
+
+	<!-- 新增 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ddweilai.microservice.base.system.api.entity.CommonTag">
+		insert into common_tag(
+			<trim suffix="" suffixOverrides=",">
+				<if test = "id != null">
+					id,
+				</if>
+				<if test = "tagName != null">
+					tag_name,
+				</if>
+				<if test = "tagIdentify != null">
+					tag_identify,
+				</if>
+				<if test = "module != null">
+					module,
+				</if>
+				<if test = "thirdId != null">
+					third_id,
+				</if>
+				<if test = "delFlag != null">
+					del_flag,
+				</if>
+				<if test = "createdId != null">
+					created_id,
+				</if>
+				<if test = "createdAt != null">
+					created_at,
+				</if>
+				<if test = "updatedId != null">
+					updated_id,
+				</if>
+				<if test = "updatedAt != null">
+					updated_at
+				</if>
+			</trim>
+		)values(
+			<trim suffix="" suffixOverrides=",">
+				<if test = "id != null">
+					#{id},
+				</if>
+				<if test = "tagName != null">
+					#{tagName},
+				</if>
+				<if test = "tagIdentify != null">
+					#{tagIdentify},
+				</if>
+				<if test = "module != null">
+					#{module},
+				</if>
+				<if test = "thirdId != null">
+					#{thirdId},
+				</if>
+				<if test = "delFlag != null">
+					#{delFlag},
+				</if>
+				<if test = "createdId != null">
+					#{createdId},
+				</if>
+				<if test = "createdAt != null">
+					#{createdAt},
+				</if>
+				<if test = "updatedId != null">
+					#{updatedId},
+				</if>
+				<if test = "updatedAt != null">
+					#{updatedAt}
+				</if>
+			</trim>
+		)
+	</insert>
+	<!-- 编辑 -->
+	<update id="update" parameterType="com.ddweilai.microservice.base.system.api.entity.CommonTag">
+		update common_tag record
+			<trim suffix="" suffixOverrides=",">
+				<set>
+					<if test = "tagName != null and tagName != ''">
+						record.tag_name = #{tagName},
+					</if>
+					<if test = "tagIdentify != null and tagIdentify != ''">
+						record.tag_identify = #{tagIdentify},
+					</if>
+					<if test = "module != null and module != ''">
+						record.module = #{module},
+					</if>
+					<if test = "thirdId != null and thirdId != ''">
+						record.third_id = #{thirdId},
+					</if>
+					<if test = "delFlag != null and delFlag != ''">
+						record.del_flag = #{delFlag},
+					</if>
+					<if test = "createdId != null and createdId != ''">
+						record.created_id = #{createdId},
+					</if>
+					<if test = "createdAt != null and createdAt != ''">
+						record.created_at = #{createdAt},
+					</if>
+					<if test = "updatedId != null and updatedId != ''">
+						record.updated_id = #{updatedId},
+					</if>
+					<if test = "updatedAt != null and updatedAt != ''">
+						record.updated_at = #{updatedAt}
+					</if>
+				</set>
+			</trim>
+		where id = #{id}
+	</update>
+
+</mapper>

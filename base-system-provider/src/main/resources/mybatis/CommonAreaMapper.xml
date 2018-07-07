@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ddweilai.microservice.base.system.provider.mapper.CommonAreaMapper">
+	<!-- 返回值映射map -->
+	<resultMap id="commonAreaMapper" type="com.ddweilai.microservice.base.system.api.entity.CommonArea">
+			<result property="id" column="id" />
+			<result property="parentId" column="parent_id" />
+			<result property="name" column="name" />
+			<result property="shortName" column="short_name" />
+			<result property="type" column="type" />
+			<result property="code" column="code" />
+			<result property="sort" column="sort" />
+			<result property="delFlag" column="del_flag" />
+			<result property="createdId" column="created_id" />
+			<result property="createdName" column="created_name" />
+			<result property="createdAt" column="created_at" />
+			<result property="updatedId" column="updated_id" />
+			<result property="updatedAt" column="updated_at" />
+			<result property="longitude" column="longitude" />
+			<result property="latitude" column="latitude" />
+	</resultMap>
+
+	<!-- 查询字段公共sql -->
+	<sql id="selectAllColumns">
+		<![CDATA[
+		SELECT
+			 id, 
+			 parent_id, 
+			 name, 
+			 short_name, 
+			 type, 
+			 code, 
+			 sort, 
+			 del_flag, 
+			 created_id, 
+			 created_name, 
+			 created_at, 
+			 updated_id, 
+			 updated_at, 
+			 longitude, 
+			 latitude 
+			FROM common_area record
+		]]>
+	</sql>
+
+	<sql id="where_fragement">
+		where 1=1
+			<if test = "id != null">
+				<![CDATA[ and record.id  = #{id} ]]>
+			</if>
+			<if test = "parentId != null">
+				<![CDATA[ and record.parent_id  = #{parentId} ]]>
+			</if>
+			<if test = "name != null">
+				<![CDATA[ and record.name  = #{name} ]]>
+			</if>
+			<if test = "shortName != null">
+				<![CDATA[ and record.short_name  = #{shortName} ]]>
+			</if>
+			<if test = "type != null">
+				<![CDATA[ and record.type  = #{type} ]]>
+			</if>
+			<if test = "code != null">
+				<![CDATA[ and record.code  = #{code} ]]>
+			</if>
+			<if test = "sort != null">
+				<![CDATA[ and record.sort  = #{sort} ]]>
+			</if>
+			<if test = "delFlag != null">
+				<![CDATA[ and record.del_flag  = #{delFlag} ]]>
+			</if>
+			<if test = "createdId != null">
+				<![CDATA[ and record.created_id  = #{createdId} ]]>
+			</if>
+			<if test = "createdName != null">
+				<![CDATA[ and record.created_name  = #{createdName} ]]>
+			</if>
+			<if test = "createdAt != null">
+				<![CDATA[ and record.created_at  = #{createdAt} ]]>
+			</if>
+			<if test = "updatedId != null">
+				<![CDATA[ and record.updated_id  = #{updatedId} ]]>
+			</if>
+			<if test = "updatedAt != null">
+				<![CDATA[ and record.updated_at  = #{updatedAt} ]]>
+			</if>
+			<if test = "longitude != null">
+				<![CDATA[ and record.longitude  = #{longitude} ]]>
+			</if>
+			<if test = "latitude != null">
+				<![CDATA[ and record.latitude  = #{latitude} ]]>
+			</if>
+	</sql>
+
+	<!-- 分页查询数据集合-->
+	<select id="findList" resultMap="commonAreaMapper" >
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+	</select>
+
+	<!-- 查询单个实体 -->
+	<select id="get" resultMap="commonAreaMapper" >
+		<include refid="selectAllColumns"/>
+		where record.id = #{id}
+	</select>
+
+	<select id="selectById" resultMap="commonAreaMapper" >
+		<include refid="selectAllColumns"/>
+		where record.id = #{id}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ddweilai.microservice.base.system.api.entity.CommonArea">
+		insert into common_area(
+				<if test = "id != null">
+					id,
+				</if>
+				<if test = "parentId != null">
+					parent_id,
+				</if>
+				<if test = "name != null">
+					name,
+				</if>
+				<if test = "shortName != null">
+					short_name,
+				</if>
+				<if test = "type != null">
+					type,
+				</if>
+				<if test = "code != null">
+					code,
+				</if>
+				<if test = "sort != null">
+					sort,
+				</if>
+				<if test = "delFlag != null">
+					del_flag,
+				</if>
+				<if test = "createdId != null">
+					created_id,
+				</if>
+				<if test = "createdName != null">
+					created_name,
+				</if>
+				<if test = "createdAt != null">
+					created_at,
+				</if>
+				<if test = "updatedId != null">
+					updated_id,
+				</if>
+				<if test = "updatedAt != null">
+					updated_at,
+				</if>
+				<if test = "longitude != null">
+					longitude,
+				</if>
+				<if test = "latitude != null">
+					latitude
+				</if>
+		)values(
+				<if test = "id != null">
+					#{id},
+				</if>
+				<if test = "parentId != null">
+					#{parentId},
+				</if>
+				<if test = "name != null">
+					#{name},
+				</if>
+				<if test = "shortName != null">
+					#{shortName},
+				</if>
+				<if test = "type != null">
+					#{type},
+				</if>
+				<if test = "code != null">
+					#{code},
+				</if>
+				<if test = "sort != null">
+					#{sort},
+				</if>
+				<if test = "delFlag != null">
+					#{delFlag},
+				</if>
+				<if test = "createdId != null">
+					#{createdId},
+				</if>
+				<if test = "createdName != null">
+					#{createdName},
+				</if>
+				<if test = "createdAt != null">
+					#{createdAt},
+				</if>
+				<if test = "updatedId != null">
+					#{updatedId},
+				</if>
+				<if test = "updatedAt != null">
+					#{updatedAt},
+				</if>
+				<if test = "longitude != null">
+					#{longitude},
+				</if>
+				<if test = "latitude != null">
+					#{latitude}
+				</if>
+		)
+	</insert>
+	<!-- 编辑 -->
+	<update id="update" parameterType="com.ddweilai.microservice.base.system.api.entity.CommonArea">
+		update common_area record 
+			<set>
+					<if test = "parentId != null and parentId != ''">
+						record.parent_id = #{parentId},
+					</if>
+					<if test = "name != null and name != ''">
+						record.name = #{name},
+					</if>
+					<if test = "shortName != null and shortName != ''">
+						record.short_name = #{shortName},
+					</if>
+					<if test = "type != null and type != ''">
+						record.type = #{type},
+					</if>
+					<if test = "code != null and code != ''">
+						record.code = #{code},
+					</if>
+					<if test = "sort != null and sort != ''">
+						record.sort = #{sort},
+					</if>
+					<if test = "delFlag != null and delFlag != ''">
+						record.del_flag = #{delFlag},
+					</if>
+					<if test = "createdId != null and createdId != ''">
+						record.created_id = #{createdId},
+					</if>
+					<if test = "createdName != null and createdName != ''">
+						record.created_name = #{createdName},
+					</if>
+					<if test = "createdAt != null and createdAt != ''">
+						record.created_at = #{createdAt},
+					</if>
+					<if test = "updatedId != null and updatedId != ''">
+						record.updated_id = #{updatedId},
+					</if>
+					<if test = "updatedAt != null and updatedAt != ''">
+						record.updated_at = #{updatedAt},
+					</if>
+					<if test = "longitude != null and longitude != ''">
+						record.longitude = #{longitude},
+					</if>
+					<if test = "latitude != null and latitude != ''">
+						record.latitude = #{latitude}
+					</if>
+			</set>
+		where id = #{id}
+	</update>
+	
+</mapper>

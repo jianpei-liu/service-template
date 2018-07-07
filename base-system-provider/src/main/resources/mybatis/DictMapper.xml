@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddweilai.microservice.base.system.provider.mapper.DictMapper">
+
+    <!--dict_main columns-->
+    <sql id="mainColumns">
+        SELECT id,
+        dict_name,
+        dict_content,
+        disabled,
+        created_at,
+        created_user_id,
+        created_user_name,
+        updated_at,
+        updated_user_id
+        from common_dict
+    </sql>
+
+    <sql id="detailColumns">
+        SELECT
+        id,
+        dict_name,
+        detail_name,
+        detail_content,
+        detail_seq,
+        disabled,
+        created_at,
+        created_user_id,
+        created_user_name,
+        updated_at,
+        updated_user_id
+        from common_dict_detail
+    </sql>
+    
+    <resultMap id="DictDetailMap" type="com.ddweilai.microservice.base.system.api.entity.DictMain">
+        <result column="dict_name" property="dictName"/>
+        <!-- 用户关联角色 -->
+        <collection property="details" javaType="java.util.List" ofType="com.ddweilai.microservice.base.system.api.entity.DictDetail">
+            <result column="detail_name" property="detailName"/>
+            <result column="detail_content" property="detailContent"/>
+        </collection>
+    </resultMap>
+
+
+    <!-- 查询关联信息 -->
+    <select id="getCache" parameterType="java.util.Map" resultMap="DictDetailMap">
+        SELECT
+        m.dict_name,
+        d.detail_name,
+        d.detail_content
+        FROM
+        common_dict m
+        left join
+        common_dict_detail d
+        on m.dict_name=d.dict_name
+        WHERE m.disabled=0 and d.disabled=0
+        ORDER BY m.dict_name,d.detail_seq
+    </select>
+
+    <insert id="insert" parameterType="com.ddweilai.microservice.base.system.api.entity.DictMain" >
+      insert into common_dict(
+        dict_name,
+        dict_content,
+        disabled,
+        created_at,
+        created_user_id,
+        created_user_name,
+        updated_at,
+        updated_user_id
+      )
+      VALUES (
+        #{dictName},
+        #{dictContent},
+        #{disabled,jdbcType=INTEGER},
+        #{createdAt},
+        #{createdUserId},
+        #{createdUserName},
+        #{updatedAt},
+        #{updatedUserId}
+      )
+    </insert>
+
+    <insert id="insertItem" parameterType="com.ddweilai.microservice.base.system.api.entity.DictDetail" >
+      insert into common_dict_detail(
+        dict_name,
+        detail_name,
+        detail_content,
+        detail_seq,
+        disabled,
+        created_at,
+        created_user_id,
+        created_user_name,
+        updated_at,
+        updated_user_id
+      )
+      values(
+        #{dictName},
+        #{detailName},
+        #{detailContent},
+        #{detailSeq, jdbcType=INTEGER},
+        #{disabled, jdbcType=INTEGER},
+        #{createdAt},
+        #{createdUserId},
+        #{createdUserName},
+        #{updatedAt},
+        #{updatedUserId}
+      )
+
+    </insert>
+
+    <update id="update" parameterType="com.ddweilai.microservice.base.system.api.entity.DictMain" >
+       UPDATE common_dict
+        <set>
+            <if test="updatedAt != null">
+                updated_at=#{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dictContent != null and dictContent != ''">
+                dict_content=#{dictContent},
+            </if>
+            <if test="disabled != null">
+                disabled=#{disabled},
+            </if>
+            <if test="updatedUserId != null and updatedUserId != ''">
+                updated_user_id=#{updatedUserId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateItem" parameterType="com.ddweilai.microservice.base.system.api.entity.DictDetail">
+        UPDATE common_dict_detail
+          <set>
+              <if test="updatedAt != null">
+                  updated_at=#{updatedAt,jdbcType=TIMESTAMP},
+              </if>
+              <if test="detailContent != null and detailContent != ''">
+                  detail_content=#{detailContent},
+              </if>
+              <if test="detailSeq != null">
+                  detail_seq=#{detailSeq},
+              </if>
+              <if test="disabled != null">
+                  disabled=#{disabled},
+              </if>
+              <if test="updatedUserId != null and updatedUserId != ''">
+                  updated_user_id=#{updatedUserId},
+              </if>
+          </set>
+        where id=#{id}
+    </update>
+
+    <select id="findItemsByName" parameterType="java.lang.String" resultType="com.ddweilai.microservice.base.system.api.entity.DictDetail">
+        <include refid="detailColumns" />
+        WHERE dict_name=#{dictName}
+        order by detail_seq
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        DELETE from common_dict where id=#{id}
+    </delete>
+
+    <delete id="delItem" parameterType="java.lang.String">
+        DELETE from common_dict_detail where id=#{id}
+    </delete>
+
+    <select id="get"  parameterType="java.lang.String" resultType="com.ddweilai.microservice.base.system.api.entity.DictMain">
+        <include refid="mainColumns"/>
+        where id=#{id}
+    </select>
+
+
+
+    <!-- 分页查询实验 -->
+    <select id="findList" resultType="com.ddweilai.microservice.base.system.api.entity.DictMain" parameterType="com.ddweilai.microservice.base.system.api.entity.DictMain">
+        <include refid="mainColumns"/>
+        <where>
+            <if test="dictName != null and dictName != ''">
+                and dict_name  like CONCAT('%',#{dictName},'%')
+            </if>
+            <if test="dictContent != null and dictContent != ''">
+                and dict_content  like CONCAT('%',#{dictContent},'%')
+            </if>
+            <if test="disabled != null">
+                and disabled=#{disabled}
+            </if>
+        </where>
+        ORDER BY id
+    </select>
+
+
+</mapper>
